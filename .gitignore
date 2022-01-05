@@ -1,0 +1,11 @@
+.vscode
+env
+.pyc
+*.pyc
+**.pyc
+/**.*.pyc
+restapp/.__pycache__
+__pycache__
+**/__pycache__
+rclonerest/rclonerest/local_settings.py
+*db.sqlite3

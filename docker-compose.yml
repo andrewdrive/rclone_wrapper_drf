@@ -1,0 +1,29 @@
+version: "3.3"
+services:
+  restapp:
+    build: drf_project/
+    command: bash -c "python manage.py migrate && python manage.py sync && python manage.py runserver 0.0.0.0:8000 --insecure"
+    volumes:
+      - './drf_project:/rest'
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_DEBUG=1
+    depends_on:
+      - rclone
+  websockets:
+    build: fastapi_websockets/
+    command: bash -c "python main.py"
+    volumes:
+      - './fastapi_websockets:/websockets'
+    ports:
+      - "8003:8003"
+    depends_on:
+      - rclone
+  rclone:
+    build: rclone_app/
+    command: bash -c "rclone rcd --rc-web-gui-update --rc-serve --rc-no-auth --rc-addr=0.0.0.0:8002  --exclude '.**' --use-json-log"
+    volumes:
+      - './rclone_app:/rclone'
+    ports:
+      - "8002:8002"
